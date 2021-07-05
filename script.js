@@ -4,6 +4,39 @@
 // THEN I am presented with current and future conditions for that city and that city is added to the search history
     // Using text input/submit, reach out to the Open Weather API and return the weather conditions for the requested city.
 
+    var APIKey = "6ccba9dac9ded6fc0fec4605e4c31d92";
+    var city = "";
+
+// API call for one city
+
+$(document).ready(function(){
+    // Get value on button click and log value
+    $("#searchBtn").click(function(){
+        var city = $("#searchInput").val();
+        console.log(city);
+
+        // console.log(searchTerm);
+        var queryURL = "http://api.openweathermap.org/data/2.5/weather?q=" + city + "&appid=" + APIKey;
+        console.log(queryURL);
+
+    fetch(queryURL)
+    .then(function (response) {
+        console.log(response.status);
+        // Check if response is good
+        if (response.status === 200) {
+        
+        }
+        return response.json();
+    })
+    .then(function (data) {
+        // Check that info is coming back correctly
+        console.log(data);
+
+        // This data then needs to be appended to the page and saved to local storage
+
+    });
+    });
+});
 
 // WHEN I view current weather conditions for that city
 // THEN I am presented with the city name, the date, an icon representation of weather conditions, the temperature, the humidity, the wind speed, and the UV index
