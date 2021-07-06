@@ -12,6 +12,7 @@
 $(document).ready(function(){
 
     var mainCity = document.querySelector(".mainForecastCity");
+    var mainImg = document.getElementById("mainImg");
     var mainTemp = document.querySelector(".mainForecastTemp");
     var mainWind = document.querySelector(".mainForecastWind");
     var mainHumidity = document.querySelector(".mainForecastHumidity");
@@ -71,6 +72,11 @@ $(document).ready(function(){
     .then(function (data) {
         // Check that info is coming back correctly
         console.log(data);
+
+        var mainImgIcon = data.weather[0].icon;
+        var mainIconURL = `http://openweathermap.org/img/wn/${mainImgIcon}@2x.png`;
+
+        mainImg.src = mainIconURL;
 
         mainTemp.textContent = "Temp: " + data.main.temp + " °F";
         console.log(data.main.temp);
