@@ -6,6 +6,8 @@
 
     var APIKey = "6ccba9dac9ded6fc0fec4605e4c31d92";
     var city = "";
+    var savedCities = [];
+    var maxCities = 5;
 
 // API call for one city
 
@@ -55,6 +57,12 @@ $(document).ready(function(){
         // console.log(searchTerm);
         console.log(city);
 
+        savedCities.unshift(city);
+        savedCities.splice(maxCities);
+        console.log(savedCities);
+
+        localStorage.setItem("savedCities", JSON.stringify(savedCities));
+
         // console.log(queryURL);
         var queryURL = "http://api.openweathermap.org/data/2.5/weather?q=" + city + "&appid=" + APIKey + "&units=imperial";
         console.log(queryURL);
@@ -101,7 +109,23 @@ $(document).ready(function(){
         console.log(data);
 
         // UV Index returned from the OneCall and passed into the mainUV html element
-        mainUV.textContent = "UV Index: " +  data.current.uvi
+        mainUV.textContent = " " + data.current.uvi
+
+        if (data.current.uvi >= 11) {
+            mainUV.style.backgroundColor = "purple";
+        }
+        else if (data.current.uvi > 7 && data.current.uvi < 11) {
+            mainUV.style.backgroundColor = "red";
+        }
+        else if (data.current.uvi > 5 && data.current.uvi < 8) {
+            mainUV.style.backgroundColor = "orange";
+        }
+        else if (data.current.uvi > 2 && data.current.uvi < 6) {
+            mainUV.style.backgroundColor = "yellow";
+        }
+        else {
+            mainUV.style.backgroundColor = "green";
+        }
     })
 
     // Fetch request for five day forecast
