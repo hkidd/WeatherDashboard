@@ -10,21 +10,30 @@
 // API call for one city
 
 $(document).ready(function(){
+
+    var mainCity = document.querySelector(".mainForecastCity");
+    var mainTemp = document.querySelector(".mainForecastTemp");
+    var mainWind = document.querySelector(".mainForecastWind");
+    var mainHumidity = document.querySelector(".mainForecastHumidity");
+    var mainUV = document.querySelector(".mainForecastUV");
+
+
     // Get value on button click and log value
     $("#searchBtn").click(function(){
         var city = $("#searchInput").val();
         console.log(city);
 
         // console.log(searchTerm);
-        var queryURL = "http://api.openweathermap.org/data/2.5/weather?q=" + city + "&appid=" + APIKey;
+        var queryURL = "http://api.openweathermap.org/data/2.5/weather?q=" + city + "&appid=" + APIKey + "&units=imperial";
         console.log(queryURL);
 
     fetch(queryURL)
     .then(function (response) {
         console.log(response.status);
         // Check if response is good
-        if (response.status === 200) {
-        
+        if (response.ok) {
+            mainCity.textContent = city + " (" + moment().format('L') + ")";
+
         }
         return response.json();
     })
@@ -32,10 +41,35 @@ $(document).ready(function(){
         // Check that info is coming back correctly
         console.log(data);
 
-        // This data then needs to be appended to the page and saved to local storage
+        mainTemp.textContent = "Temp: " + data.main.temp + " °F";
+        console.log(data.main.temp);
+
+        mainWind.textContent = "Wind: " + data.wind.speed + " MPH";
+        console.log(data.wind.speed);
+
+        mainHumidity.textContent = "Humidity: " + data.main.humidity + " %";
+        console.log(data.main.humidity);
+
+        // Varaiables for the latitude and longitude initialized
+        var lat = data.coord.lat;
+        var lon = data.coord.lon;
+
+        // Nested fetch function to take the latitude and longitude to use for the OneCall API (only way to get the UV Index)
+        return fetch("https://api.openweathermap.org/data/2.5/onecall?lat=" + lat + "&lon=" + lon + "&appid=" + APIKey + "&units=imperial");
+    })
+    .then(function (response) {
+        return response.json();
+    })
+    .then(function(data) {
+        console.log(data);
+
+        // UV Index returned from the OneCall and passed into the mainUV html element
+        mainUV.textContent = "UV Index: " +  data.current.uvi
+    })
 
     });
-    });
+
+     // This data then needs to be appended to the page and saved to local storage
 });
 
 // WHEN I view current weather conditions for that city
