@@ -78,9 +78,7 @@ $(document).ready(function() {
                 cityBtn.textContent = savedCities[i];
                 cityBtn.style.display = 'block';
                 cityBtn.value = savedCities[i];
-
                 cityBtn.addEventListener('click', reFetch);
-                console.log("Click");
 
                 prevCitiesContainer.appendChild(cityBtn);
             }
