@@ -85,7 +85,7 @@ $(document).ready(function() {
         }
 
     // console.log(queryURL);
-    var queryURL = "http://api.openweathermap.org/data/2.5/weather?q=" + city + "&appid=" + APIKey + "&units=imperial";
+    var queryURL = "https://api.openweathermap.org/data/2.5/weather?q=" + city + "&appid=" + APIKey + "&units=imperial";
     console.log(queryURL);
 
     // API call for one city
@@ -104,7 +104,7 @@ $(document).ready(function() {
 
         // Grabbing weather icon based on returned data icon value
         var mainImgIcon = data.weather[0].icon;
-        var mainIconURL = `http://openweathermap.org/img/wn/${mainImgIcon}@2x.png`;
+        var mainIconURL = `https://openweathermap.org/img/wn/${mainImgIcon}@2x.png`;
 
         // Supplying weather icon image source
         mainImg.src = mainIconURL;
@@ -176,23 +176,23 @@ $(document).ready(function() {
             console.log(data);
 
             var dayOneImgIcon = data.list[0].weather[0].icon;
-            var dayOneIconURL = `http://openweathermap.org/img/wn/${dayOneImgIcon}@2x.png`;
+            var dayOneIconURL = `https://openweathermap.org/img/wn/${dayOneImgIcon}@2x.png`;
             day1Img.src = dayOneIconURL;
 
             var dayTwoImgIcon = data.list[1].weather[0].icon;
-            var dayTwoIconURL = `http://openweathermap.org/img/wn/${dayTwoImgIcon}@2x.png`;
+            var dayTwoIconURL = `https://openweathermap.org/img/wn/${dayTwoImgIcon}@2x.png`;
             day2Img.src = dayTwoIconURL;
 
             var dayThreeImgIcon = data.list[2].weather[0].icon;
-            var dayThreeIconURL = `http://openweathermap.org/img/wn/${dayThreeImgIcon}@2x.png`;
+            var dayThreeIconURL = `https://openweathermap.org/img/wn/${dayThreeImgIcon}@2x.png`;
             day3Img.src = dayThreeIconURL;
 
             var dayFourImgIcon = data.list[3].weather[0].icon;
-            var dayFourIconURL = `http://openweathermap.org/img/wn/${dayFourImgIcon}@2x.png`;
+            var dayFourIconURL = `https://openweathermap.org/img/wn/${dayFourImgIcon}@2x.png`;
             day4Img.src = dayFourIconURL;
 
             var dayFiveImgIcon = data.list[4].weather[0].icon;
-            var dayFiveIconURL = `http://openweathermap.org/img/wn/${dayFiveImgIcon}@2x.png`;
+            var dayFiveIconURL = `https://openweathermap.org/img/wn/${dayFiveImgIcon}@2x.png`;
             day5Img.src = dayFiveIconURL;
 
             // Five day forecast values passed in for each card
@@ -228,7 +228,7 @@ $(document).ready(function() {
         // Event listener on dynamically created button gets "this" value from the clicked button
         var prevCity = this.value;
 
-        var prevQueryURL = "http://api.openweathermap.org/data/2.5/weather?q=" + prevCity + "&appid=" + APIKey + "&units=imperial";
+        var prevQueryURL = "https://api.openweathermap.org/data/2.5/weather?q=" + prevCity + "&appid=" + APIKey + "&units=imperial";
         console.log(prevQueryURL);
 
     fetch(prevQueryURL)
@@ -245,7 +245,7 @@ $(document).ready(function() {
         console.log(data);
 
         var mainImgIcon = data.weather[0].icon;
-        var mainIconURL = `http://openweathermap.org/img/wn/${mainImgIcon}@2x.png`;
+        var mainIconURL = `https://openweathermap.org/img/wn/${mainImgIcon}@2x.png`;
 
         // Supplying weather icon image source
         mainImg.src = mainIconURL;
@@ -317,23 +317,23 @@ $(document).ready(function() {
 
             // Supplying image icon sources for the five different cards
             var dayOneImgIcon = data.list[0].weather[0].icon;
-            var dayOneIconURL = `http://openweathermap.org/img/wn/${dayOneImgIcon}@2x.png`;
+            var dayOneIconURL = `https://openweathermap.org/img/wn/${dayOneImgIcon}@2x.png`;
             day1Img.src = dayOneIconURL;
 
             var dayTwoImgIcon = data.list[1].weather[0].icon;
-            var dayTwoIconURL = `http://openweathermap.org/img/wn/${dayTwoImgIcon}@2x.png`;
+            var dayTwoIconURL = `https://openweathermap.org/img/wn/${dayTwoImgIcon}@2x.png`;
             day2Img.src = dayTwoIconURL;
 
             var dayThreeImgIcon = data.list[2].weather[0].icon;
-            var dayThreeIconURL = `http://openweathermap.org/img/wn/${dayThreeImgIcon}@2x.png`;
+            var dayThreeIconURL = `https://openweathermap.org/img/wn/${dayThreeImgIcon}@2x.png`;
             day3Img.src = dayThreeIconURL;
 
             var dayFourImgIcon = data.list[3].weather[0].icon;
-            var dayFourIconURL = `http://openweathermap.org/img/wn/${dayFourImgIcon}@2x.png`;
+            var dayFourIconURL = `https://openweathermap.org/img/wn/${dayFourImgIcon}@2x.png`;
             day4Img.src = dayFourIconURL;
 
             var dayFiveImgIcon = data.list[4].weather[0].icon;
-            var dayFiveIconURL = `http://openweathermap.org/img/wn/${dayFiveImgIcon}@2x.png`;
+            var dayFiveIconURL = `https://openweathermap.org/img/wn/${dayFiveImgIcon}@2x.png`;
             day5Img.src = dayFiveIconURL;
 
             // Five day forecast values passed in for each card
