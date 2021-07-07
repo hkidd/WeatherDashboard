@@ -1,15 +1,9 @@
 // GIVEN a weather dashboard with form inputs
 
-// WHEN I search for a city
-// THEN I am presented with current and future conditions for that city and that city is added to the search history
-    // Using text input/submit, reach out to the Open Weather API and return the weather conditions for the requested city.
-
     var APIKey = "6ccba9dac9ded6fc0fec4605e4c31d92";
     var city = "";
     var savedCities = [];
     var maxCities = 5;
-
-// API call for one city
 
 $(document).ready(function(){
 
@@ -20,6 +14,9 @@ $(document).ready(function(){
     var mainHumidity = document.querySelector(".mainForecastHumidity");
     var mainUV = document.querySelector(".mainForecastUV");
 
+    // Previous city searches div
+    var prevCitiesContainer = document.querySelector(".previousSearches");
+
     // Five day forecast elements
     var day1Date = document.querySelector(".day1Date");
     var day2Date = document.querySelector(".day2Date");
@@ -27,11 +24,11 @@ $(document).ready(function(){
     var day4Date = document.querySelector(".day4Date");
     var day5Date = document.querySelector(".day5Date");
 
-    var day1Img = document.querySelector(".day1Img");
-    var day2Img = document.querySelector(".day2Img");
-    var day3Img = document.querySelector(".day3Img");
-    var day4Img = document.querySelector(".day4Img");
-    var day5Img = document.querySelector(".day5Img");
+    var day1Img = document.getElementById("day1Img");
+    var day2Img = document.getElementById("day2Img");
+    var day3Img = document.getElementById("day3Img");
+    var day4Img = document.getElementById("day4Img");
+    var day5Img = document.getElementById("day5Img");
 
     var day1Temp = document.querySelector(".day1Temp");
     var day2Temp = document.querySelector(".day2Temp");
@@ -51,10 +48,12 @@ $(document).ready(function(){
     var day4Humid = document.querySelector(".day4Humid");
     var day5Humid = document.querySelector(".day5Humid");
 
+    // Global variable created to access dynamically created buttons
+    var cityBtn = "";
+
     // Get value on button click and log value
     $("#searchBtn").click(function(){
         var city = $("#searchInput").val();
-        // console.log(searchTerm);
         console.log(city);
 
         savedCities.unshift(city);
@@ -62,18 +61,40 @@ $(document).ready(function(){
         console.log(savedCities);
 
         localStorage.setItem("savedCities", JSON.stringify(savedCities));
+        JSON.parse(localStorage.getItem("savedCities"));
 
-        // console.log(queryURL);
-        var queryURL = "http://api.openweathermap.org/data/2.5/weather?q=" + city + "&appid=" + APIKey + "&units=imperial";
-        console.log(queryURL);
+        displaySearchedCities(savedCities);
 
+        function displaySearchedCities(savedCities) {
+            prevCitiesContainer.innerHTML = "";
+
+            for (var i = 0; i < savedCities.length; i++) {
+                cityBtn = document.createElement('button');
+                cityBtn.classList = 'btn btn-outline-secondary prevCityBtn';
+                console.log(savedCities[i]);
+
+                cityBtn.textContent = savedCities[i];
+                cityBtn.style.display = 'block';
+                cityBtn.value = savedCities[i];
+
+                cityBtn.addEventListener('click', reFetch);
+                console.log("Click");
+
+                prevCitiesContainer.appendChild(cityBtn);
+            }
+        }
+
+    // console.log(queryURL);
+    var queryURL = "http://api.openweathermap.org/data/2.5/weather?q=" + city + "&appid=" + APIKey + "&units=imperial";
+    console.log(queryURL);
+
+    // API call for one city
     fetch(queryURL)
     .then(function (response) {
         console.log(response.status);
-        // Check if response is good
         if (response.ok) {
+            // Display searched city name with current date
             mainCity.textContent = city + " (" + moment().format('L') + ")";
-
         }
         return response.json();
     })
@@ -81,19 +102,24 @@ $(document).ready(function(){
         // Check that info is coming back correctly
         console.log(data);
 
+        // Grabbing weather icon based on returned data icon value
         var mainImgIcon = data.weather[0].icon;
         var mainIconURL = `http://openweathermap.org/img/wn/${mainImgIcon}@2x.png`;
 
+        // Supplying weather icon image source
         mainImg.src = mainIconURL;
 
-        mainTemp.textContent = "Temp: " + data.main.temp + " °F";
-        console.log(data.main.temp);
-
-        mainWind.textContent = "Wind: " + data.wind.speed + " MPH";
-        console.log(data.wind.speed);
-
-        mainHumidity.textContent = "Humidity: " + data.main.humidity + " %";
-        console.log(data.main.humidity);
+         // Supplying main forecast temperature data
+         mainTemp.textContent = "Temp: " + data.main.temp + " °F";
+         console.log(data.main.temp);
+ 
+         // Supplying main forecast wind data
+         mainWind.textContent = "Wind: " + data.wind.speed + " MPH";
+         console.log(data.wind.speed);
+ 
+         // Supplying main forecast humidity data
+         mainHumidity.textContent = "Humidity: " + data.main.humidity + " %";
+         console.log(data.main.humidity);
 
         // Varaiables for the latitude and longitude initialized
         var lat = data.coord.lat;
@@ -111,6 +137,7 @@ $(document).ready(function(){
         // UV Index returned from the OneCall and passed into the mainUV html element
         mainUV.textContent = " " + data.current.uvi
 
+        // UV index background changes based on returned value
         if (data.current.uvi >= 11) {
             mainUV.style.backgroundColor = "purple";
         }
@@ -128,9 +155,7 @@ $(document).ready(function(){
         }
     })
 
-    // Fetch request for five day forecast
-
-    // console.log(fiveDayURL);
+    // Fetch request for five day forecast  in bottom cards
     var fiveDayURL = "https://api.openweathermap.org/data/2.5/forecast?q=" + city + "&appid=" + APIKey + "&units=imperial";
     console.log(fiveDayURL);
 
@@ -138,15 +163,32 @@ $(document).ready(function(){
     .then(function (response) {
         console.log(response.status);
         // Check if response is good
-        if (response.ok) {
-            mainCity.textContent = city + " (" + moment().format('L') + ")";
-
-        }
+        if (response.ok) 
         return response.json();
     })
         .then(function (data) {
             // Check that info is coming back correctly
             console.log(data);
+
+            var dayOneImgIcon = data.list[0].weather[0].icon;
+            var dayOneIconURL = `http://openweathermap.org/img/wn/${dayOneImgIcon}@2x.png`;
+            day1Img.src = dayOneIconURL;
+
+            var dayTwoImgIcon = data.list[1].weather[0].icon;
+            var dayTwoIconURL = `http://openweathermap.org/img/wn/${dayTwoImgIcon}@2x.png`;
+            day2Img.src = dayTwoIconURL;
+
+            var dayThreeImgIcon = data.list[2].weather[0].icon;
+            var dayThreeIconURL = `http://openweathermap.org/img/wn/${dayThreeImgIcon}@2x.png`;
+            day3Img.src = dayThreeIconURL;
+
+            var dayFourImgIcon = data.list[3].weather[0].icon;
+            var dayFourIconURL = `http://openweathermap.org/img/wn/${dayFourImgIcon}@2x.png`;
+            day4Img.src = dayFourIconURL;
+
+            var dayFiveImgIcon = data.list[4].weather[0].icon;
+            var dayFiveIconURL = `http://openweathermap.org/img/wn/${dayFiveImgIcon}@2x.png`;
+            day5Img.src = dayFiveIconURL;
 
             // Five day forecast values passed in for each card
 
@@ -174,27 +216,142 @@ $(document).ready(function(){
             day4Humid.textContent = "Humidity: " + data.list[3].main.humidity + " %";
             day5Humid.textContent = "Humidity: " + data.list[4].main.humidity + " %";
         })
-
     });
+    
+    // There was probably an easier way to pass in the saved values, but I just repeated the above code while changing the city value to prevCity.
+    var reFetch = function() {
+        // Event listener on dynamically created button gets "this" value from the clicked button
+        var prevCity = this.value;
 
-     // This data then needs to be appended to the page and saved to local storage
-});
+        var prevQueryURL = "http://api.openweathermap.org/data/2.5/weather?q=" + prevCity + "&appid=" + APIKey + "&units=imperial";
+        console.log(prevQueryURL);
 
-// WHEN I view current weather conditions for that city
-// THEN I am presented with the city name, the date, an icon representation of weather conditions, the temperature, the humidity, the wind speed, and the UV index
-    // Using the Open Weather API's, pull the various weather info required and update the HTML/text content with that info
+    fetch(prevQueryURL)
+    .then(function (response) {
+        console.log(response.status);
+        if (response.ok) {
+            // Display (previously) searched city name with current date
+            mainCity.textContent = prevCity + " (" + moment().format('L') + ")";
+        }
+        return response.json();
+    })
+    .then(function (data) {
+        // Check that info is coming back correctly
+        console.log(data);
 
+        var mainImgIcon = data.weather[0].icon;
+        var mainIconURL = `http://openweathermap.org/img/wn/${mainImgIcon}@2x.png`;
 
-// WHEN I view the UV index
-// THEN I am presented with a color that indicates whether the conditions are favorable, moderate, or severe
-    // The UV index HTML element will change colors depending on how high the number is (similar to work day planner)
+        // Supplying weather icon image source
+        mainImg.src = mainIconURL;
 
+        // Supplying main forecast temperature data
+        mainTemp.textContent = "Temp: " + data.main.temp + " °F";
+        console.log(data.main.temp);
 
-// WHEN I view future weather conditions for that city
-// THEN I am presented with a 5-day forecast that displays the date, an icon representation of weather conditions, the temperature, the wind speed, and the humidity
-    // Bootstrap cards along bottom of page will show the 5-day forecast
+        // Supplying main forecast wind data
+        mainWind.textContent = "Wind: " + data.wind.speed + " MPH";
+        console.log(data.wind.speed);
 
+        // Supplying main forecast humidity data
+        mainHumidity.textContent = "Humidity: " + data.main.humidity + " %";
+        console.log(data.main.humidity);
 
-// WHEN I click on a city in the search history
-// THEN I am again presented with current and future conditions for that city
-    // A list of the previous five searches is saved along the left side.  When clicked, the weather info is pulled again similar to the initial search.
+        // Varaiables for the latitude and longitude initialized
+        var lat = data.coord.lat;
+        var lon = data.coord.lon;
+
+        // Nested fetch function to take the latitude and longitude to use for the OneCall API (only way to get the UV Index)
+        return fetch("https://api.openweathermap.org/data/2.5/onecall?lat=" + lat + "&lon=" + lon + "&appid=" + APIKey + "&units=imperial");
+    })
+    .then(function (response) {
+        return response.json();
+    })
+    .then(function(data) {
+        console.log(data);
+
+        // UV Index returned from the OneCall and passed into the mainUV html element
+        mainUV.textContent = " " + data.current.uvi
+
+        // UV index background changes based on returned value
+        if (data.current.uvi >= 11) {
+            mainUV.style.backgroundColor = "purple";
+        }
+        else if (data.current.uvi > 7 && data.current.uvi < 11) {
+            mainUV.style.backgroundColor = "red";
+        }
+        else if (data.current.uvi > 5 && data.current.uvi < 8) {
+            mainUV.style.backgroundColor = "orange";
+        }
+        else if (data.current.uvi > 2 && data.current.uvi < 6) {
+            mainUV.style.backgroundColor = "yellow";
+        }
+        else {
+            mainUV.style.backgroundColor = "green";
+        }
+    })
+
+    // Fetch request for five day forecast in bottom cards
+    var fiveDayURL = "https://api.openweathermap.org/data/2.5/forecast?q=" + prevCity + "&appid=" + APIKey + "&units=imperial";
+    console.log(fiveDayURL);
+
+    fetch(fiveDayURL)
+    .then(function (response) {
+        console.log(response.status);
+        if (response.ok) 
+        return response.json();
+    })
+        .then(function (data) {
+            // Check that info is coming back correctly
+            console.log(data);
+
+            // Supplying image icon sources for the five different cards
+            var dayOneImgIcon = data.list[0].weather[0].icon;
+            var dayOneIconURL = `http://openweathermap.org/img/wn/${dayOneImgIcon}@2x.png`;
+            day1Img.src = dayOneIconURL;
+
+            var dayTwoImgIcon = data.list[1].weather[0].icon;
+            var dayTwoIconURL = `http://openweathermap.org/img/wn/${dayTwoImgIcon}@2x.png`;
+            day2Img.src = dayTwoIconURL;
+
+            var dayThreeImgIcon = data.list[2].weather[0].icon;
+            var dayThreeIconURL = `http://openweathermap.org/img/wn/${dayThreeImgIcon}@2x.png`;
+            day3Img.src = dayThreeIconURL;
+
+            var dayFourImgIcon = data.list[3].weather[0].icon;
+            var dayFourIconURL = `http://openweathermap.org/img/wn/${dayFourImgIcon}@2x.png`;
+            day4Img.src = dayFourIconURL;
+
+            var dayFiveImgIcon = data.list[4].weather[0].icon;
+            var dayFiveIconURL = `http://openweathermap.org/img/wn/${dayFiveImgIcon}@2x.png`;
+            day5Img.src = dayFiveIconURL;
+
+            // Five day forecast values passed in for each card
+
+            day1Date.textContent = moment().format('L');
+            day2Date.textContent = moment().add(1, 'days').format('L');
+            day3Date.textContent = moment().add(2, 'days').format('L');
+            day4Date.textContent = moment().add(3, 'days').format('L');
+            day5Date.textContent = moment().add(4, 'days').format('L');
+
+            day1Temp.textContent = "Temp: " + data.list[0].main.temp + " °F";
+            day2Temp.textContent = "Temp: " + data.list[1].main.temp + " °F";
+            day3Temp.textContent = "Temp: " + data.list[2].main.temp + " °F";
+            day4Temp.textContent = "Temp: " + data.list[3].main.temp + " °F";
+            day5Temp.textContent = "Temp: " + data.list[4].main.temp + " °F";
+
+            day1Wind.textContent = "Wind: " + data.list[0].wind.speed + " MPH";
+            day2Wind.textContent = "Wind: " + data.list[1].wind.speed + " MPH";
+            day3Wind.textContent = "Wind: " + data.list[2].wind.speed + " MPH";
+            day4Wind.textContent = "Wind: " + data.list[3].wind.speed + " MPH";
+            day5Wind.textContent = "Wind: " + data.list[4].wind.speed + " MPH";
+
+            day1Humid.textContent = "Humidity: " + data.list[0].main.humidity + " %";
+            day2Humid.textContent = "Humidity: " + data.list[1].main.humidity + " %";
+            day3Humid.textContent = "Humidity: " + data.list[2].main.humidity + " %";
+            day4Humid.textContent = "Humidity: " + data.list[3].main.humidity + " %";
+            day5Humid.textContent = "Humidity: " + data.list[4].main.humidity + " %";
+        })
+    };
+  }
+);

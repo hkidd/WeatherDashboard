@@ -20,7 +20,7 @@ header {
     border-bottom: 2px solid midnightblue;
 }
 
-#prevCity {
+.prevCityBtn {
     display: flex;
     margin: 0 auto;
     margin-bottom: 15px;
