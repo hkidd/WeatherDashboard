@@ -1,11 +1,11 @@
 // GIVEN a weather dashboard with form inputs
 
+    // GLOBAL VARIABLES
+
     var APIKey = "6ccba9dac9ded6fc0fec4605e4c31d92";
     var city = "";
     var savedCities = [];
     var maxCities = 5;
-
-$(document).ready(function(){
 
     var mainCity = document.querySelector(".mainForecastCity");
     var mainImg = document.getElementById("mainImg");
@@ -50,6 +50,8 @@ $(document).ready(function(){
 
     // Global variable created to access dynamically created buttons
     var cityBtn = "";
+
+$(document).ready(function() {
 
     // Get value on button click and log value
     $("#searchBtn").click(function(){
@@ -140,18 +142,23 @@ $(document).ready(function(){
         // UV index background changes based on returned value
         if (data.current.uvi >= 11) {
             mainUV.style.backgroundColor = "purple";
+            mainUV.style.color = "white";
         }
         else if (data.current.uvi > 7 && data.current.uvi < 11) {
             mainUV.style.backgroundColor = "red";
+            mainUV.style.color = "white";
         }
         else if (data.current.uvi > 5 && data.current.uvi < 8) {
             mainUV.style.backgroundColor = "orange";
+            mainUV.style.color = "white";
         }
         else if (data.current.uvi > 2 && data.current.uvi < 6) {
             mainUV.style.backgroundColor = "yellow";
+            mainUV.style.color = "black";
         }
         else {
             mainUV.style.backgroundColor = "green";
+            mainUV.style.color = "white";
         }
     })
 
@@ -276,18 +283,23 @@ $(document).ready(function(){
         // UV index background changes based on returned value
         if (data.current.uvi >= 11) {
             mainUV.style.backgroundColor = "purple";
+            mainUV.style.color = "white";
         }
         else if (data.current.uvi > 7 && data.current.uvi < 11) {
             mainUV.style.backgroundColor = "red";
+            mainUV.style.color = "white";
         }
         else if (data.current.uvi > 5 && data.current.uvi < 8) {
             mainUV.style.backgroundColor = "orange";
+            mainUV.style.color = "white";
         }
         else if (data.current.uvi > 2 && data.current.uvi < 6) {
             mainUV.style.backgroundColor = "yellow";
+            mainUV.style.color = "black";
         }
         else {
             mainUV.style.backgroundColor = "green";
+            mainUV.style.color = "white";
         }
     })
 

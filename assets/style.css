@@ -50,10 +50,13 @@ header {
 .mainUV {
     padding: 8px;
     font-weight: bold;
+    margin-left: 1%;
 }
 
 .mainForecastUV {
-    border-radius: 5px;
+    border-radius: 3px;
+    padding: 8px;
+    margin-left: 1%;
 }
 
 .fiveDay {
