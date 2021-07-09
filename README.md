@@ -1,6 +1,8 @@
 # WeatherDashboard_HW6
 A weather dashboard that runs in the browser and features dynamically updated HTML and CSS.
 
+Link to deployed page:  https://github.com/hkidd/WeatherDashboard_HW6/deployments/activity_log?environment=github-pages
+
 ## Purpose
 The purpose of this homework assignment was to build a functional weather dashboard with a main forecast for the current day, with a color changing UV index, as well as a 5 day forecast using cards underneath.  This activity relied heavily on getting JavaScript, jQuery, Bootstrap, and Moment.js working together correctly along with saving to/retrieving from local storage.<br>
 
