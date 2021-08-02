@@ -1,4 +1,4 @@
-# WeatherDashboard_HW6
+# WeatherDashboard
 A weather dashboard that runs in the browser and features dynamically updated HTML and CSS.
 
 Link to deployed page:  https://github.com/hkidd/WeatherDashboard_HW6/deployments/activity_log?environment=github-pages
